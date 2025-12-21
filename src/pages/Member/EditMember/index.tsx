@@ -104,7 +104,7 @@ export default function EditMember() {
 
   const reducer = (
     state: EditMemberState,
-    action: { type: ActionType; payload },
+    action: { type: ActionType; payload }
   ) => {
     const updatedData = { ...state };
     switch (action.type) {
@@ -142,10 +142,16 @@ export default function EditMember() {
             const endpoint = "/images/upload-avatar";
             const requestMethod = "POST";
 
+            const params = {
+              avatar_id: user.id,
+              thumbnail: "true",
+            };
+
             API({
               method: requestMethod,
               url: endpoint,
               data: form,
+              params: params,
               onUploadProgress: (progressEvent) => {
                 const progress = progressEvent.loaded / progressEvent.total;
                 const percentCompleted = Math.round(progress * 100);
@@ -165,7 +171,7 @@ export default function EditMember() {
                 });
                 toast.done(toastId.current);
                 toast.success("Image uploaded successfully");
-                const image_name = res.data.data.name;
+                const image_name = `${res.data.data.name}?updated=${Math.random()}`;
                 dispatch({
                   type: ActionType.UpdateProfilePictureLink,
                   payload: image_name,
@@ -243,7 +249,7 @@ export default function EditMember() {
       target_user_id: id,
     };
     const update_profile_perm = user.permission.includes(
-      Permission.UpdateProfile,
+      Permission.UpdateProfile
     );
     const requestData = {
       ...reqData,
